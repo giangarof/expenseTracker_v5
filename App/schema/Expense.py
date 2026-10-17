@@ -11,7 +11,7 @@ class Expense(Base):
     amount = Column(Integer)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    def __init__(self, id, name, amount):
+    def __init__(self, id, name, amount, owner_id):
         self.id = id
         self.name = name
         self.amount = amount
@@ -19,7 +19,6 @@ class Expense(Base):
 
 
 class ExpenseRequest(BaseModel):
-    # id = Column(Integer, primary_key=True, index=True)
     name: str = Field(min_length=2, max_length=50)
     amount: int = Field(gt=0, lt=20000)
 

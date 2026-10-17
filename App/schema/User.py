@@ -2,38 +2,45 @@ from pydantic import BaseModel, Field
 
 from App.database.database import Base
 from sqlalchemy import Column, Integer, String
+from passlib.context import CryptContext
+
+bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+# BASE MODEL
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    first_name = Column(String)
-    last_name = Column(String)
+    name = Column(String)
+    username = Column(String, unique=True)
     email = Column(String, unique=True)
-    phone = Column(String, unique=True)
+    password = Column(String)
+    role = Column(String, default="basic", nullable=False)
 
-    def __init__(self, id, first_name, last_name, email, phone):
+    def __init__(self, id, name, username, email, password, role="basic"):
         self.id = id
-        self.first_name = first_name
-        self.last_name = last_name
+        self.name = name
+        self.username = username
         self.email = email
-        self.phone = phone
+        self.password = password
+        self.role = role
 
 
+# SIGNUP REQUEST
 class UserRequest(BaseModel):
-    # id = Column(Integer, primary_key=True, index=True)
-    first_name: str = Field(min_length=2, max_length=50)
-    last_name: str = Field(min_length=2, max_length=50)
-    email: str = Field(min_length=1, max_length=50)
-    phone: str = Field(max_length=35)
+
+    name: str = Field(min_length=2, max_length=40)
+    username: str = Field(min_length=2, max_length=40)
+    email: str = Field(min_length=2, max_length=50)
+    password: str = Field(min_length=8, max_length=40)
 
     model_config = {
         "json_schema_extra": {
             "example": {
-                "first_name": "jhon",
-                "last_name": "doe",
-                "email": "test@test.com",
-                "phone": "+1 2223334455",
+                "name": "jhon doe",
+                "username": "jdoe",
+                "email": "jhon@gmail.com",
+                "password": "password",
             }
         }
     }

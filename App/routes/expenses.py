@@ -4,7 +4,7 @@ from fastapi import Depends, FastAPI, APIRouter, HTTPException, status, Path
 
 from App.schema.Expense import Expense, ExpenseRequest
 from App.database.database import get_db, db_dependency
-from utilities.utilities import incrementId, checkIfExist
+from App.utilities.utils import incrementId, checkIfExist
 
 router = APIRouter(prefix="/api/expenses", tags=["Expenses"])
 
