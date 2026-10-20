@@ -10,7 +10,7 @@ from jose import JWTError, jwt
 
 # Description: Generate a new ID
 # Explanation: Get the last row id to calculate the new id: (Last row id + 1)
-async def incrementId(model, db):
+def incrementId(model, db):
     data = db.query(model).all()
 
     if len(data) == 0:

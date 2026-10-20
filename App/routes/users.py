@@ -6,6 +6,9 @@ from fastapi import Depends, FastAPI, APIRouter, HTTPException, status, Path
 
 from App.schema.Token import Token
 from App.schema.User import User, UserRequest
+from App.schema.Expense import Expense
+from App.schema.Income import Income
+
 from App.database.database import get_db, db_dependency
 from App.utilities.auth import authenticate_user, create_access_token, user_dependency
 from App.utilities.utils import hashPassword, incrementId, verify_password
@@ -21,6 +24,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency
 ):
     user = db.query(User).filter(User.username == form_data.username).first()
+
     # check if user exist
     if not user:
         raise HTTPException(
@@ -45,7 +49,7 @@ async def signup(db: db_dependency, userRequest: UserRequest):
     # users = db.query(User).all()
 
     # Generate ID
-    new_id = await incrementId(User, db)
+    new_id = incrementId(User, db)
     # Hash password
     hashed = await hashPassword(userRequest.password)
 
@@ -71,41 +75,30 @@ def logout():
 
 
 # Method: GET
-# Route: /api/user/users
-# Description: Fetch all the users
-@router.get("/users", status_code=status.HTTP_200_OK)
-def fetchAll(db: db_dependency):
-    data = db.query(User).all()
-    if not data:
-        raise HTTPException(status_code=400, detail="nothing found")
-    return {"message": "All users", "data": data}
-
-
-# Method: GET
 # Route: /api/user/profile
 # Description: Retrive the logged user information
 @router.get("/profile")
 def profile(user: user_dependency, db: db_dependency):
     theUser = db.query(User).filter(User.id == user["id"]).first()
-    return theUser
+    expenses = db.query(Expense).filter(Expense.owner_id == user["id"]).all()
+    incomes = db.query(Income).filter(Income.owner_id == user["id"]).all()
+    totalExpenses = 0
+    totalIncome = 0
+
+    for expense in expenses:
+        totalExpenses += expense.amount
+
+    for income in incomes:
+        totalIncome += income.amount
+
+    return {
+        "Profile": theUser,
+        "Total Income": totalIncome,
+        "Total Expenses": totalExpenses,
+    }
 
 
-# Method: PUT
-# Route: /api/user/update/{id}
-# Description: Update an existing user by id
-@router.put("/")
-def updateUser():
-    return "logout"
-
-
-# Method: DELETE
-# Route: /api/user/{id}
-# Description: Delete an existing user by id
-@router.delete("/")
-def deleteUser():
-    return "logout"
-
-
+# Route to authenticate user
 @router.post("/token", response_model=Token)
 async def login_for_acces_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency
