@@ -11,11 +11,11 @@ bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    username = Column(String, unique=True)
-    email = Column(String, unique=True)
-    password = Column(String)
-    role = Column(String, default="basic", nullable=False)
+    name = Column(String(100))
+    username = Column(String(100), unique=True)
+    email = Column(String(100), unique=True)
+    password = Column(String(100))
+    role = Column(String(10), default="basic", nullable=False)
 
     def __init__(self, id, name, username, email, password, role="basic"):
         self.id = id

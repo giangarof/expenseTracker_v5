@@ -6,5 +6,6 @@ load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 database = os.getenv("DATABASE_URL")
+mysql_database = os.getenv("DATABASE_MYSQL")
 algorithm = "HS256"
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/api/user/token")
