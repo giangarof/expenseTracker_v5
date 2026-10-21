@@ -1,5 +1,11 @@
 # Expense tracker V5
 
+## Branch: main
+
+- This branch uses sqlite
+
+## About
+
 - Fifth version of my Expense Tracker series.
 - Continuation of V3, which introduced SQL for database management.
 - V5 implements authentication and user verification.
@@ -8,14 +14,14 @@
 # Steps
 
 - Clone the project
-- Create a virtual environment python3 -m venv <name>
-- Activate the environment: source <name>/bin/activate
-- Install dependencies pip install -r requirements.txt
-- To run: fastapi run main.py --reload
+- Create a virtual environment: `python3 -m venv <name>`
+- Activate the environment: `source <name>/bin/activate`
+- Install dependencies: `pip install -r requirements.txt`
+- To run: `fastapi run main.py --reload`
 
 ## To run sqlite
 
-- in the root, type: `sqlite3 <filename_name>.db`
+- In the root, type: `sqlite3 <filename_name>.db`
 
 # Previous versions
 

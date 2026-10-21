@@ -4,15 +4,14 @@ from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from App.exports import database
 
 # database connection URL that tells SQLAlchemy which database to connect to and where it is located.
-SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
+# SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
 
 # Create the engine
 # Engine is the object that SQLAlchemy uses to communicate with your database.
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+engine = create_engine(database, connect_args={"check_same_thread": False})
 
 # sessionmaker() is a SQLAlchemy function that creates a session factory.
 # SessionLocal creates sessions that actually perform database work.
